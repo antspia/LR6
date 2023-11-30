@@ -74,55 +74,6 @@ public class Cinema {
         System.out.println(output);
     }
 
-    public Optional<int[]> findBestAvailable(int hallNumber, int numSeats) {
-        if (hallNumber >= cinema.length || numSeats > cinema[hallNumber][0].length) {
-            System.err.println("Incorrect input");
-            return Optional.empty();
-        }
-
-        Optional<Integer>[][] costs = buildArrayOfCosts(hallNumber);
-        for (int row = 0; row < cinema[hallNumber].length; row++) {
-            for (int seat = 0; seat < cinema[hallNumber][row].length; seat++) {
-                if (cinema[hallNumber][row][seat] == 1) {
-                    costs[row][seat] = Optional.empty();
-                }
-            }
-        }
-
-        int[] result = new int[0];
-        int maxSum = 0;
-        for (int row = 0; row < cinema[hallNumber].length; row++) {
-            first: for (int firstPtr = 0; firstPtr < cinema[hallNumber][row].length - numSeats; firstPtr++) {
-                int currentSum = 0;
-                for (int secondPtr = 0, i = 0; secondPtr < numSeats; secondPtr++) {
-                    if (costs[row][firstPtr + secondPtr].isPresent()) {
-                        currentSum += costs[row][firstPtr + secondPtr].get();
-                    } else {
-                        firstPtr += secondPtr;
-                        break first;
-                    }
-                }
-                if (currentSum > maxSum) {
-                    maxSum = currentSum;
-                    result = new int[2];
-                    result[0] = row;
-                    result[1] = firstPtr;
-                }
-            }
-        }
-
-        if (result.length == 0) {
-            return Optional.empty();
-        } else {
-            return Optional.of(result);
-        }
-    }
-
-    public boolean autoBook(int hallNumber, int numSeats) {
-        Optional<int[]> bestSeats = findBestAvailable(hallNumber, numSeats);
-        return bestSeats.map(seats -> bookSeats(hallNumber, seats[0], IntStream.range(seats[1], seats[1] + numSeats).toArray()))
-                .orElse(false);
-    }
 
     private boolean isBooked(int hallNumber, int row, int[] seats) {
         return Arrays.stream(seats)

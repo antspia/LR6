@@ -23,10 +23,7 @@ public class CinemaTest {
         boolean availabilityCheck = cinema.checkAvailability(0, 3);
         System.out.println("Are 3 consecutive seats available? " + availabilityCheck);
 
-        // Test finding best available seats
-        System.out.println("\nTest 4: Finding best available seats");
-        cinema.autoBook(1, 4);
-        cinema.printSeatingArrangement(1);
+
 
     }
 }
